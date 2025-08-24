@@ -1,0 +1,265 @@
+
+Input: Show all customers.
+Query:
+SELECT * FROM Customers;
+
+
+Input: Find all products that cost more than 500.
+Query:
+
+SELECT ProductName, Price FROM Products WHERE Price > 500;
+
+Input: List all completed orders.
+Query:
+SELECT * FROM Orders WHERE OrderStatus = 'Completed';
+
+Input: Get customer names and their emails.
+Query:
+
+SELECT CustomerName, Email FROM Customers;
+
+
+Input: Show order details for OrderID 1.
+Query:
+SELECT o.OrderID, od.ProductID, od.Quantity, od.FinalPrice
+FROM Orders o
+JOIN OrderDetails od ON o.OrderID = od.OrderID
+WHERE o.OrderID = 1;
+
+Input: List all orders placed by John Doe.
+Query:
+
+SELECT o.OrderID, o.OrderDate, o.TotalAmount
+FROM Orders o
+JOIN Customers c ON o.CustomerID = c.CustomerID
+WHERE c.CustomerName = 'John Doe';
+
+
+Input: Find products supplied by "ABC Supplies."
+Query:
+
+SELECT p.ProductName, p.Price
+FROM Products p
+JOIN Suppliers s ON p.SupplierID = s.SupplierID
+WHERE s.SupplierName = 'ABC Supplies';
+
+Input: Count the total orders placed by each customer.
+Query:
+SELECT c.CustomerName, COUNT(o.OrderID) AS TotalOrders
+FROM Customers c
+LEFT JOIN Orders o ON c.CustomerID = o.CustomerID
+GROUP BY c.CustomerName;
+
+
+Input: Find customers who placed orders worth more than 10,000 in total.
+Query:
+SELECT c.CustomerName, SUM(o.TotalAmount) AS TotalSpent
+FROM Customers c
+JOIN Orders o ON c.CustomerID = o.CustomerID
+GROUP BY c.CustomerName
+HAVING SUM(o.TotalAmount) > 10000;
+
+Input: List all products in orders shipped by "Blue Dart" with their quantities.
+Query:
+SELECT p.ProductName, od.Quantity, o.CourierService
+FROM OrderDetails od
+JOIN Orders o ON od.OrderID = o.OrderID
+JOIN Products p ON od.ProductID = p.ProductID
+WHERE o.CourierService = 'Blue Dart';
+
+Input: Show the most expensive product in each category.
+Query:
+SELECT Category, ProductName, MAX(Price) AS HighestPrice
+FROM Products
+GROUP BY Category;
+
+Input: Get the total tax collected for all orders.
+Query:
+SELECT SUM(od.TaxAmount) AS TotalTaxCollected
+FROM OrderDetails od;
+
+
+Input: Find the top 3 customers who spent the most.
+Query:
+SELECT c.CustomerName, SUM(o.TotalAmount) AS TotalSpent
+FROM Customers c
+JOIN Orders o ON c.CustomerID = o.CustomerID
+GROUP BY c.CustomerName
+ORDER BY TotalSpent DESC
+LIMIT 3;
+
+Input: Show the details of products that were returned.
+Query:
+SELECT p.ProductName, od.Quantity, od.ReturnStatus
+FROM OrderDetails od
+JOIN Products p ON od.ProductID = p.ProductID
+WHERE od.ReturnStatus = 'Returned';
+
+Input: List all customers who have not placed any orders.
+Query:
+SELECT c.CustomerName
+FROM Customers c
+LEFT JOIN Orders o ON c.CustomerID = o.CustomerID
+WHERE o.OrderID IS NULL;
+
+Input: Show the total revenue generated for each month.
+Query:
+SELECT DATE_FORMAT(OrderDate, '%Y-%m') AS Month, SUM(TotalAmount) AS Revenue
+FROM Orders
+GROUP BY DATE_FORMAT(OrderDate, '%Y-%m');
+
+
+
+
+ChatGPT can make mistakes. Check important info.
+
+
+I encountered an error while trying to use the tool. This was the error: `QuerySQLCheckerTool` is not fully defined; you should define `BaseCache`, then call `QuerySQLCheckerTool.model_rebuild()`.
+
+
+SELECT p.* FROM Products p JOIN OrderDetails od ON p.ProductID = od.ProductID WHERE od.ReturnStatus = 'Returned';\
+
+
+
+
+
+data_analyst = Agent(
+	role="Senior Data Analyst",
+	goal="Provide summarized result to the user for there original query.",
+	backstory=dedent(
+		"""
+		You have deep experience with analyzing datasets using Python.
+		You receive the original query, the generated sql query and the data fetched from database. Use these create a
+		proper response for the user.
+	"""
+	),
+	llm=llm,
+	allow_delegation=False,
+)
+
+
+
+
+
+
+llm = LLM(
+    model="gemini/gemini-1.5-pro-latest",
+	temperature=0.0,
+	callbacks=[LLMCallbackHandler(Path("prompts.jsonl"))],
+)
+
+llm_langchain = ChatGoogleGenerativeAI(
+	model="gemini-1.5-pro",
+	temperature=0.0,
+	callbacks=[LLMCallbackHandler(Path("prompts.jsonl"))],
+)
+
+	embedder={
+        "provider": "google",
+        "config": {
+			"model": "models/text-embedding-004",
+            "api_key": "AIzaSyDXvr0bf_Xw2XYt-2RGu_RzoepE5TTz3E4",
+        }
+    }
+    
+    step_callback=streamlit_callback,
+    
+    
+    
+    
+    167.103.7.77
+    
+    
+    
+Get the total number of products sold and total revenue generated for each product.
+Show the average price of products sold, grouped by product condition and return status
+Which supplier's products have generated the most revenue?
+Show the number of orders and total revenue generated per month.
+Find customers who have ordered products from more than 3 different categories.
+
+
+
+SELECT AVG(Quantity * UnitPrice * (1 - Discount)) AS AverageOrderValue FROM OrderDetails
+
+
+    
+Get the total number of products sold and total revenue generated for each product.
+Show the average price of products sold, grouped by product condition and return status
+Which supplier's products have generated the most revenue?
+Show the number of orders and total revenue generated per month.
+
+
+
+Find customers who have ordered products from more than 3 different categories.
+Get the total number of products sold and total revenue generated for each product.
+Count the total orders placed by each customer.
+What is the average order value.
+List all customers who have not placed any orders.
+What is the total revenue generated for each month.
+
+
+
+
+What is the total revenue generated for January 2025 ?
+
+
+
+
+
+
+
+What is the total revenue generated for January 2025 ?
+
+List all orders placed by John Doe.
+
+
+
+
+Who is the president of united states of america ?
+
+
+
+What is the average order value.
+Find customers who have ordered products from more than 3 different categories.
+List all customers who have not placed any orders.
+Get the total tax collected for all orders.
+Show the average price of products sold, grouped by product condition and return status
+Which supplier's products have generated the most revenue?
+
+
+Add a new customer named Suman to the customers table.
+
+
+
+SELECT c.CustomerID, c.FirstName, c.LastName, COUNT(DISTINCT p.CategoryID) AS DistinctCategories FROM Customers c 
+JOIN Orders o ON c.CustomerID = o.CustomerID 
+JOIN OrderDetails od ON o.OrderID = od.OrderID 
+JOIN Products p ON od.ProductID = p.ProductID GROUP BY c.CustomerID, c.FirstName, c.LastName HAVING COUNT(DISTINCT p.CategoryID) > 3
+
+
+
+Identify customers who have purchased products from more than 2 different brands.
+
+SELECT c.CustomerID, c.FirstName, c.LastName 
+FROM Customers c 
+JOIN Orders o ON c.CustomerID = o.CustomerID 
+JOIN OrderDetails od ON o.OrderID = od.OrderID 
+JOIN Products p ON od.ProductID = p.ProductID 
+JOIN Brands b ON p.BrandID = b.BrandID 
+GROUP BY c.CustomerID, c.FirstName, c.LastName  -- Added FirstName and LastName to the GROUP BY clause
+HAVING COUNT(DISTINCT b.BrandID) > 2;
+
+
+
+gemini API Key - AIzaSyDXvr0bf_Xw2XYt-2RGu_RzoepE5TTz3E4
+
+makeathon18-448810:us-central1:e-commerce
+3306
+e-commerce
+34.68.157.83
+12345678
+
+user - root
+123456789
+
+167.10
